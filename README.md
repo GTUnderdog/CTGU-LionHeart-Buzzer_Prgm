@@ -37,7 +37,8 @@ RoboMaster机器人通常是远程遥控操作，且要求嵌入式控制系统�
 `get_buzzer_effect_point() `
 来获取地址，例如：
 
-		`buzzer_t *buzzer = get_buzzer_effect_point();`
+`buzzer_t *buzzer = get_buzzer_effect_point();`
+
 若需要在程序进行到某阶段时，触发指定的音效，则直接操作指针的sound_effect即可。以触发“系统启动音效”为例：
 
 ```
@@ -46,13 +47,13 @@ RoboMaster机器人通常是远程遥控操作，且要求嵌入式控制系统�
 	......
 ```
 
-	或：
+或：
 	
 ```
-		......
-		if (*(buzzer->is_busy) == FALSE)
-			buzzer->sound_effect = SYSTEM_START_BEEP;
-		......
+	......
+	if (*(buzzer->is_busy) == FALSE)
+		buzzer->sound_effect = SYSTEM_START_BEEP;
+	......
 ```
 
 若其他任务中调用蜂鸣器，与此任务产生冲突，导致蜂鸣器音效不正常，可通过操作：
@@ -62,20 +63,29 @@ RoboMaster机器人通常是远程遥控操作，且要求嵌入式控制系统�
 有关各种音效的说明，详见sound_effects_task.h中的sound_effects_t枚举类型。
     
 # 五、使用实例：
+
 本程序的文件皆移植自RM2020官方步兵开源程序。本程序依赖HAL库“stm32f4xx_hal”工作，请确保移植的目标工程使用HAL库，否则需要重新设计buzzer_TIM_init.c/h和bsp_buzzer_driver.c/h中的部分函数。也可由HAL直接产生初始化代码，详细操作方法请参照RoboMaster官方的GitHub开源文档：“RoboMaster开发板C型嵌入式软件教程文档.pdf”第71页。
 
 以RM2020官方开源程序为例，若要将此程序移植进RM2020官方步兵程序，则需要：
-			·将源文件和头文件复制到工程目录下，并在工程中添加源文件
-			·在freertos.c中包含头文件：#include "sound_effects_task.h"
-			·创建蜂鸣器音效任务：
-				osThreadDef(buzr, buzzer_effects_task, osPriorityNormal, 0, 128);
-				testHandle = osThreadCreate(osThread(buzr), NULL);
-			·在test_task.c中引入头文件，并在任务中合适的位置上添加：
-				buzzer_t *buzzer = get_buzzer_effect_point();
-				......
-				buzzer->work = FALSE;
-				......
-				buzzer->work = TRUE;
-        以消除官方代码中的模块离线提示音与任务冲突造成的音效异常（其实不操作也没有大问题，只是声音难听一点而已）
-			·按照需求，在其他源文件中执行功能调用（上述）步骤。移植进其他工程中，则需要根据具体情况自行做出调整。
+
++ 将源文件和头文件复制到工程目录下，并在工程中添加源文件
++ 在freertos.c中包含头文件：#include "sound_effects_task.h"
++ 创建蜂鸣器音效任务：
+
+```
+	osThreadDef(buzr, buzzer_effects_task, osPriorityNormal, 0, 128);
+	testHandle = osThreadCreate(osThread(buzr), NULL);
+```
+
++ 在test_task.c中引入头文件，并在任务中合适的位置上添加：
+```
+buzzer_t *buzzer = get_buzzer_effect_point();
+......
+buzzer->work = FALSE;
+......
+buzzer->work = TRUE;
+```
+
+以消除官方代码中的模块离线提示音与任务冲突造成的音效异常（其实不操作也没有大问题，只是声音难听一点而已）
++ 按照需求，在其他源文件中执行功能调用（上述）步骤。移植进其他工程中，则需要根据具体情况自行做出调整。
 
