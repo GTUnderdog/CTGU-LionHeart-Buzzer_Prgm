@@ -37,7 +37,7 @@ RoboMaster机器人通常是远程遥控操作，且要求嵌入式控制系统�
 `get_buzzer_effect_point() `
 来获取地址，例如：
 
-`buzzer_t *buzzer = get_buzzer_effect_point();`
+`	buzzer_t *buzzer = get_buzzer_effect_point();`
 
 若需要在程序进行到某阶段时，触发指定的音效，则直接操作指针的sound_effect即可。以触发“系统启动音效”为例：
 
@@ -80,11 +80,11 @@ RoboMaster机器人通常是远程遥控操作，且要求嵌入式控制系统�
 
 + 在test_task.c中引入头文件，并在任务中合适的位置上添加：
 ```
-buzzer_t *buzzer = get_buzzer_effect_point();
-......
-buzzer->work = FALSE;
-......
-buzzer->work = TRUE;
+	buzzer_t *buzzer = get_buzzer_effect_point();
+	......
+	buzzer->work = FALSE;
+	......
+	buzzer->work = TRUE;
 ```
 以消除官方代码中的模块离线提示音与任务冲突造成的音效异常（其实不操作也没有大问题，只是声音难听一点而已）
 + 按照需求，在其他源文件中执行功能调用（上述）步骤。移植进其他工程中，则需要根据具体情况自行做出调整。
