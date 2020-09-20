@@ -64,7 +64,7 @@ RoboMaster机器人通常是远程遥控操作，且要求嵌入式控制系统�
     
 # 五、使用实例：
 
-本程序的文件皆移植自RM2020官方步兵开源程序。本程序依赖HAL库“stm32f4xx_hal”工作，请确保移植的目标工程使用HAL库，否则需要重新设计buzzer_TIM_init.c/h和bsp_buzzer_driver.c/h中的部分函数。也可由HAL直接产生初始化代码，详细操作方法请参照RoboMaster官方的GitHub开源文档：“RoboMaster开发板C型嵌入式软件教程文档.pdf”第71页。
+本程序的文件皆移植自RM2020官方步兵开源程序。本程序依赖HAL库“stm32f4xx_hal”工作，请确保移植的目标工程使用HAL库，否则需要重新设计buzzer_TIM_init.c/h和bsp_buzzer_driver.c/h中的部分函数。也可由HAL直接产生初始化代码，详细操作方法请参照RoboMaster官方的GitHub开源文档：[RoboMaster开发板C型嵌入式软件教程文档.pdf”第71页](https://github.com/RoboMaster/Development-Board-C-Examples/blob/master/RoboMaster%E5%BC%80%E5%8F%91%E6%9D%BFC%E5%9E%8B%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%BD%AF%E4%BB%B6%E6%95%99%E7%A8%8B%E6%96%87%E6%A1%A3.pdf)。
 
 以RM2020官方开源程序为例，若要将此程序移植进RM2020官方步兵程序，则需要：
 
