@@ -37,7 +37,7 @@ RoboMaster机器人通常是远程遥控操作，且要求嵌入式控制系统�
 `get_buzzer_effect_point() `
 来获取地址，例如：
 
-	`buzzer_t *buzzer = get_buzzer_effect_point();`
+`buzzer_t *buzzer = get_buzzer_effect_point();`
 
 若需要在程序进行到某阶段时，触发指定的音效，则直接操作指针的sound_effect即可。以触发“系统启动音效”为例：
 
