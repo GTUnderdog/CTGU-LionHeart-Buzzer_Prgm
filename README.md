@@ -5,39 +5,41 @@ RoboMaster机器人通常是远程遥控操作，且要求嵌入式控制系统�
 
 
 # 二、程序特点：
-+由RTOS分出一个线程独立维护，不影响其他任务的运行；
-+程序代码轻量，原理简单，不占用系统资源；
-+具有十二种预置效果音，可灵活适配多种调试场景；
-+大量使用指针传递参数，效率高、封闭性好。
++ 由RTOS分出一个线程独立维护，不影响其他任务的运行；
++ 程序代码轻量，原理简单，不占用系统资源；
++ 具有十二种预置效果音，可灵活适配多种调试场景；
++ 大量使用指针传递参数，效率高、封闭性好。
   
   
 # 三、源文件说明：
-## 1.sound_effects_task.c/h：存放着需要用系统维护的任务函数，其中包含各种音效的实现逻辑；还有调用任务功能的结构体成员、指针传递函数等。需要二次开发、增加新音效等，需要修改此文件。
-  
-## 2.bsp_buzzer_driver.c/h：存放着RoboMaster-C板板载蜂鸣器的驱动函数。在一些移植情况下，可能需要修改此文件中的部分代码。
-  
-## 3.buzzer_TIM_init.c/h：存放着RoboMaster-C板有关板载陀螺仪的接口、TIM初始化函数。在一些移植情况下，可能需要修改此文件中的部分代码。
+1. sound_effects_task.c/h：存放着需要用系统维护的任务函数，其中包含各种音效的实现逻辑；还有调用任务功能的结构体成员、指针传递函数等。需要二次开发、增加新音效等，需要修改此文件。
+2. bsp_buzzer_driver.c/h：存放着RoboMaster-C板板载蜂鸣器的驱动函数。在一些移植情况下，可能需要修改此文件中的部分代码。
+3. buzzer_TIM_init.c/h：存放着RoboMaster-C板有关板载陀螺仪的接口、TIM初始化函数。在一些移植情况下，可能需要修改此文件中的部分代码。
   
   
 # 四、使用方法说明：
-  1.任务维护：
-		使用FreeRTOS维护任务函数：buzzer_effects_task(void const *argument)，保证该任务得到较高的优先级。
-		需要包含头文件：#include "sound_effects_task.h" 来索引上述函数。
+1. 任务维护：
+	使用FreeRTOS维护任务函数：buzzer_effects_task(void const *argument)，保证该任务得到较高的优先级。
+	需要包含头文件：#include "sound_effects_task.h" 来索引上述函数。
 
-  2.功能调用（举例）：
-  假设在另一源文件“xxx.c"中需要触发蜂鸣器音效，则首先需要包含头文件：
-	#include "sound_effects_task.h"
-  然后需要创建一指针，使其指向sound_effects_task中的buzzer_control，此处直接调用函数 get_buzzer_effect_point() 来获取地址，例如：
-	buzzer_t *buzzer = get_buzzer_effect_point();
-  若需要在程序进行到某阶段时，触发指定的音效，则直接操作指针的sound_effect即可。以触发“系统启动音效”为例：
-	......
-	buzzer->sound_effect = SYSTEM_START_BEEP;
-	......
-  或：
-	......
-	if (*(buzzer->is_busy) == FALSE)
+2. 功能调用（举例）：
+	假设在另一源文件“xxx.c"中需要触发蜂鸣器音效，则首先需要包含头文件：
+		#include "sound_effects_task.h"
+	然后需要创建一指针，使其指向sound_effects_task中的buzzer_control，此处直接调用函数 get_buzzer_effect_point() 来获取地址，例如：
+		buzzer_t *buzzer = get_buzzer_effect_point();
+	若需要在程序进行到某阶段时，触发指定的音效，则直接操作指针的sound_effect即可。以触发“系统启动音效”为例：
+	'''
+		......
 		buzzer->sound_effect = SYSTEM_START_BEEP;
-	......
+		......
+	'''
+	或：
+	'''
+		......
+		if (*(buzzer->is_busy) == FALSE)
+			buzzer->sound_effect = SYSTEM_START_BEEP;
+		......
+	'''
   若其他任务中调用蜂鸣器，与此任务产生冲突，导致蜂鸣器音效不正常，可通过操作：
 	buzzer->work = FALSE;
   来停用蜂鸣器音效操作。此时，蜂鸣器仍会完成当前正在鸣响的音效，然后才会停止。
