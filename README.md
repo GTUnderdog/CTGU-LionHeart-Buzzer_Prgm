@@ -24,22 +24,22 @@ RoboMaster机器人通常是远程遥控操作，且要求嵌入式控制系统�
 
 2. 功能调用（举例）：
 	假设在另一源文件“xxx.c"中需要触发蜂鸣器音效，则首先需要包含头文件：
-		#include "sound_effects_task.h"
+		'#include "sound_effects_task.h"'
 	然后需要创建一指针，使其指向sound_effects_task中的buzzer_control，此处直接调用函数 get_buzzer_effect_point() 来获取地址，例如：
-		buzzer_t *buzzer = get_buzzer_effect_point();
+		'buzzer_t *buzzer = get_buzzer_effect_point();'
 	若需要在程序进行到某阶段时，触发指定的音效，则直接操作指针的sound_effect即可。以触发“系统启动音效”为例：
-	'''
+'''
 		......
 		buzzer->sound_effect = SYSTEM_START_BEEP;
 		......
-	'''
+'''
 	或：
-	'''
+'''
 		......
 		if (*(buzzer->is_busy) == FALSE)
 			buzzer->sound_effect = SYSTEM_START_BEEP;
 		......
-	'''
+'''
   若其他任务中调用蜂鸣器，与此任务产生冲突，导致蜂鸣器音效不正常，可通过操作：
 	buzzer->work = FALSE;
   来停用蜂鸣器音效操作。此时，蜂鸣器仍会完成当前正在鸣响的音效，然后才会停止。
